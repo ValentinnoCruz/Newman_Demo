@@ -1,0 +1,12 @@
+runtime: nodejs16
+env_variables:
+  DB_TYPE: cloudSQL
+  PLAYFAB_TITLE_ID: 59D13
+  CLOUD_SQL_CONNECTION_STRING: gcp-kokomo-dev:us-central1:kokomo-sql
+  CLOUD_SQL_USERNAME: admin
+  CLOUD_SQL_DATABASE: kokomo
+  IN_GCP: true
+  VPC_NETWORK_NAME: kokomo-vpc-network
+  STAGE: dev
+vpc_access_connector:
+  name: projects/gcp-kokomo-dev/locations/us-central1/connectors/central-serverless

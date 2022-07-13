@@ -1,0 +1,1909 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Kokomo",
+    "version": "1.0.0 alpha2"
+  },
+  "externalDocs": {
+    "description": "Confluence API definitions",
+    "url": "https://canoniis.atlassian.net/wiki/spaces/A/pages/1679982593/API"
+  },
+  "servers": [
+    {
+      "url": "/api/v1/"
+    }
+  ],
+  "paths": {
+    "/user/init": {
+      "post": {
+        "tags": [
+          "Core"
+        ],
+        "summary": "Initialize user account in db",
+        "description": "Initialize the user's account in the database, should be called right after login",
+        "parameters": [
+          {
+            "name": "X-Playfab-Auth-Token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Session ticket"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User initialized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInitializedResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/notifications": {
+      "get": {
+        "tags": [
+          "Core"
+        ],
+        "summary": "Get notifications for user",
+        "description": "Get set of notifications for a given user",
+        "responses": {
+          "200": {
+            "description": "User notifications",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/admin/gameserver/jobs/adjuststandby": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Adjust count of standby servers in Google Cloud",
+        "description": "Adjust the number of Standby servers in Google Cloud",
+        "responses": {
+          "200": {
+            "description": "Server capacity adjusted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "appenginecron": []
+          }
+        ]
+      }
+    },
+    "/admin/jobs/collectmetrics": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Collect metrics",
+        "description": "Collect metrics",
+        "responses": {
+          "200": {
+            "description": "Collected metrics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "appenginecron": []
+          }
+        ]
+      }
+    },
+    "/admin/jobs/databaseclean": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Clean database",
+        "description": "clean old entries in database",
+        "responses": {
+          "200": {
+            "description": "Database cleaned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "appenginecron": []
+          }
+        ]
+      }
+    },
+    "/call/initialize": {
+      "post": {
+        "tags": [
+          "Call"
+        ],
+        "summary": "Initialize a call",
+        "description": "Initialize a call, meant to be called right after a call has been established between 2 users",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CallInitializedBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Call initialized response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CallInitializedResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/call/requestserver": {
+      "post": {
+        "tags": [
+          "Call"
+        ],
+        "summary": "Request a server",
+        "description": "Request a server for a call, this would be the server the caller is uploading to",
+        "requestBody": {
+          "description": "Call request",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestServerRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request Server Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestServerResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Call must be initialized before requesting server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No servers available, retry later",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/call/getremoteserver": {
+      "get": {
+        "tags": [
+          "Call"
+        ],
+        "summary": "Get the remote server to pull data from",
+        "description": "Get the remote server to which the other user is streaming",
+        "parameters": [
+          {
+            "name": "call_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Call Id"
+          },
+          {
+            "name": "user_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "User Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get remote server response - for Alpha 1 this array will always be only 1 element long",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetRemoteServerResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Could not find remote server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/call/voiptoken/register": {
+      "post": {
+        "tags": [
+          "Call"
+        ],
+        "summary": "Register VOIP push notification token for current user",
+        "description": "Register the VOIP push notification token for the current user",
+        "requestBody": {
+          "description": "Register Push Notification Request",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterPushNotificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token succesfully registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/call/voiptoken/deregister": {
+      "post": {
+        "tags": [
+          "Call"
+        ],
+        "summary": "De-register VOIP push notification token for current user",
+        "description": "De-register the VOIP push notification token for the current user",
+        "responses": {
+          "200": {
+            "description": "Token succesfully de-registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/call/notifyuser": {
+      "post": {
+        "tags": [
+          "Call"
+        ],
+        "summary": "Send push notification to user being called",
+        "description": "Send push notification to user being called",
+        "requestBody": {
+          "description": "Notify user Request",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotifyUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User Notified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Remote user not registerd for push notification or device token expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/call/end": {
+      "post": {
+        "tags": [
+          "Call"
+        ],
+        "summary": "End the call the logged in user is currently on",
+        "description": "End the call the logged in user is currently on",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EndCallRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Call succesfully ended",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/pushnotification/register": {
+      "post": {
+        "tags": [
+          "Push Notifications"
+        ],
+        "summary": "Register for push notifications",
+        "description": "Register for push notifications",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterPushNotificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token succesfully registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/pushnotification/deregister": {
+      "post": {
+        "tags": [
+          "Push Notifications"
+        ],
+        "summary": "De-register for push notifications",
+        "description": "De-register for push notifications",
+        "responses": {
+          "200": {
+            "description": "Token succesfully de-registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/pushnotification/call/busy": {
+      "post": {
+        "tags": [
+          "Push Notifications"
+        ],
+        "summary": "Send Call busy push notification",
+        "description": "Send Call busy push notification",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemotePlayerIDPushNotificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User Notified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Remote user not registered for push notification or device token expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/pushnotification/call/decline": {
+      "post": {
+        "tags": [
+          "Push Notifications"
+        ],
+        "summary": "Send call decline push notification",
+        "description": "Send call decline push notification",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemotePlayerIDPushNotificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User Notified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Remote user not registered for push notification or device token expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/pushnotification/call/end": {
+      "post": {
+        "tags": [
+          "Push Notifications"
+        ],
+        "summary": "Send call end push notification",
+        "description": "Send call end push notification",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemotePlayerIDPushNotificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User Notified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Remote user not registered for push notification or device token expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/pushnotification/friend/accept": {
+      "post": {
+        "tags": [
+          "Push Notifications"
+        ],
+        "summary": "Send accept friend request push notification",
+        "description": "Send accept friend request push notification",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FriendPushNotificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User Notified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Remote user not registered for push notification or device token expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/pushnotification/friend/request": {
+      "post": {
+        "tags": [
+          "Push Notifications"
+        ],
+        "summary": "Send friend request push notification",
+        "description": "Send friend request push notification",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FriendPushNotificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User Notified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Remote user not registered for push notification or device token expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/hmd/generatepairingcode": {
+      "post": {
+        "tags": [
+          "HMD Pairing"
+        ],
+        "summary": "Generate an HMD pairing code",
+        "description": "Generate an HMD pairing code for the given hmd device",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeneratePairingCodeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User Notified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeneratePairingCodeResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hmd/pairhmd": {
+      "post": {
+        "tags": [
+          "HMD Pairing"
+        ],
+        "summary": "Pair HMD to account",
+        "description": "Pair HMD to account",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PairHMDRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Paired succesfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed to find pairing code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/hmd/pairingstatus": {
+      "get": {
+        "tags": [
+          "HMD Pairing"
+        ],
+        "summary": "Check HMD pairing status",
+        "description": "Check HMD pairing status and return jwt tokens if headset is paired",
+        "parameters": [
+          {
+            "name": "pairing_code",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Pairing code"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paired succesfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HMDPairingStatusResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed to find pairing code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/playfab/sessiontoken": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Get Playfab Session Token",
+        "description": "Get Playfab Session Token",
+        "responses": {
+          "200": {
+            "description": "Paired succesfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayfabSessionTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed to find pairing code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
+      }
+    },
+    "/auth/refreshjwttoken": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Refresh JWT token",
+        "description": "Refresh JWT token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshJWTTokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token Refreshed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshJWTTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Failed to find pairing code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ping": {
+      "get": {
+        "tags": [
+          "Core"
+        ],
+        "summary": "Ping server",
+        "description": "ping server",
+        "responses": {
+          "200": {
+            "description": "pong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/about": {
+      "get": {
+        "tags": [
+          "Core"
+        ],
+        "summary": "Detail of Server",
+        "description": "Detail of Server",
+        "responses": {
+          "200": {
+            "description": "Detail of Server",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAboutResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NotificationResponse": {
+        "required": [
+          "notifications"
+        ],
+        "type": "object",
+        "properties": {
+          "notifications": {
+            "type": "array",
+            "description": "unread notifications, in order of date received",
+            "items": {
+              "$ref": "#/components/schemas/Notification"
+            }
+          }
+        }
+      },
+      "Notification": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Notification id",
+            "example": "234-234"
+          },
+          "message": {
+            "type": "string",
+            "description": "Notification message to display",
+            "example": "Missed call from Foo"
+          },
+          "type": {
+            "type": "string",
+            "description": "Notification type",
+            "example": "missed_call",
+            "enum": [
+              "missed_call",
+              "generic"
+            ]
+          },
+          "receivedAt": {
+            "type": "string",
+            "description": "Date notification received in ISO 8601 format",
+            "example": "2021-10-05T14:48:00.000Z"
+          }
+        }
+      },
+      "MessageResponse": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Information message regarding outcome, message should not be used for application logic",
+            "example": "Informational message"
+          }
+        }
+      },
+      "HMDPairingStatusResponse": {
+        "required": [
+          "jwt_access_token",
+          "jwt_refresh_token"
+        ],
+        "type": "object",
+        "properties": {
+          "jwt_access_token": {
+            "type": "string",
+            "description": "JWT access token"
+          },
+          "jwt_refresh_token": {
+            "type": "string",
+            "description": "JWT refresh token"
+          }
+        }
+      },
+      "RefreshJWTTokenRequest": {
+        "required": [
+          "refresh_token"
+        ],
+        "type": "object",
+        "properties": {
+          "refresh_token": {
+            "type": "string",
+            "description": "JWT refresh token"
+          }
+        }
+      },
+      "RefreshJWTTokenResponse": {
+        "required": [
+          "access_token"
+        ],
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "JWT access token"
+          }
+        }
+      },
+      "PlayfabSessionTokenResponse": {
+        "required": [
+          "playfab_session_token",
+          "playfab_entity_token"
+        ],
+        "type": "object",
+        "properties": {
+          "playfab_session_token": {
+            "type": "string",
+            "description": "Playfab session token (valid for 24 hours)"
+          },
+          "playfab_entity_token": {
+            "type": "string",
+            "description": "Playfab Entity token (valid for 24 hours)"
+          }
+        }
+      },
+      "NotifyUserRequest": {
+        "required": [
+          "call_id"
+        ],
+        "type": "object",
+        "properties": {
+          "call_id": {
+            "type": "string",
+            "description": "Call ID which has been spawned",
+            "example": "0fe73ba3-82ac-4fab-ab8e-d2b83385f7af"
+          }
+        }
+      },
+      "GeneratePairingCodeRequest": {
+        "required": [
+          "device_id"
+        ],
+        "type": "object",
+        "properties": {
+          "device_id": {
+            "type": "string",
+            "description": "Unique device id identifying hmd",
+            "example": "c67bc007-3b29-4cd1-9892-7407ad23d83b"
+          }
+        }
+      },
+      "GeneratePairingCodeResponse": {
+        "required": [
+          "pairing_code"
+        ],
+        "type": "object",
+        "properties": {
+          "pairing_code": {
+            "type": "string",
+            "description": "Pairing code for device id",
+            "example": "happy green coat"
+          }
+        }
+      },
+      "PairHMDRequest": {
+        "required": [
+          "pairing_code"
+        ],
+        "type": "object",
+        "properties": {
+          "pairing_code": {
+            "type": "string",
+            "description": "Pairing code which matches code on HMD",
+            "example": "happy green coat"
+          }
+        }
+      },
+      "RemotePlayerIDPushNotificationRequest": {
+        "required": [
+          "remote_player_id"
+        ],
+        "type": "object",
+        "properties": {
+          "remote_player_id": {
+            "type": "string",
+            "description": "Remote player id to notify",
+            "example": "EDCD9EA34A8676C4"
+          }
+        }
+      },
+      "FriendPushNotificationRequest": {
+        "required": [
+          "remote_player_id"
+        ],
+        "type": "object",
+        "properties": {
+          "remote_player_id": {
+            "type": "string",
+            "description": "Remote player id to notify",
+            "example": "EDCD9EA34A8676C4"
+          },
+          "player_name": {
+            "type": "string",
+            "description": "Player name sending the push notification",
+            "example": "John James"
+          }
+        }
+      },
+      "RegisterPushNotificationRequest": {
+        "required": [
+          "token"
+        ],
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "push notification token (VOIP or regular)",
+            "example": "4a1577dc63c77b43187ab519afdf4694af88627ff0a01d2954d479525120ca31"
+          }
+        }
+      },
+      "UserInitializedResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "message",
+            "example": "User successfully initialized"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "accessToken": {
+                "type": "string",
+                "description": "JWT token",
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJJZCI6IkE0RTVGN0ZBNDQ2NTUwRUYiLCJ0aW1lIjoiVGh1IE1heSAxMiAyMDIyIDE3OjM2OjI3IEdNVCswMDAwIChDb29yZGluYXRlZCBVbml2ZXJzYWwgVGltZSkifSwiaWF0IjoxNjUyMzc2OTg3LCJleHAiOjE2NTIzODQxODd9.53iIuT18pnP_Ss011pNB1hm2nywWV90_uy81S-Z9G-0"
+              },
+              "refreshToken": {
+                "type": "string",
+                "description": "JWT token",
+                "example": "qFSmGJ5ixa03tmnv7MIwXkhGJj2oSnAWx9b2OCNKckqgyEv4EXJJ00oF8hxM6SPL82t8TBK1N6yCEBvmEuNlQ2W416xvQhpIDGqYH9RXfYKR0SjzU5EAncQ3UvO90yl1"
+              }
+            }
+          }
+        }
+      },
+      "CallInitializedBody": {
+        "required": [
+          "user_id",
+          "calling_player_id"
+        ],
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "user id",
+            "example": "513DE340E4206DDC"
+          },
+          "calling_player_id": {
+            "type": "string",
+            "description": "user id",
+            "example": "A4E5F7FA446550EF"
+          },
+          "capture_method": {
+            "type": "string",
+            "description": "capture method used",
+            "default": "webrtc",
+            "enum": [
+              "webrtc",
+              "ccapi"
+            ],
+            "example": "ccapi"
+          }
+        }
+      },
+      "CallInitializedResponse": {
+        "required": [
+          "call_id"
+        ],
+        "type": "object",
+        "properties": {
+          "call_id": {
+            "type": "string",
+            "description": "Call ID which has been spawned",
+            "example": "0fe73ba3-82ac-4fab-ab8e-d2b83385f7af"
+          }
+        }
+      },
+      "GetRemoteServerResponse": {
+        "required": [
+          "remote_servers"
+        ],
+        "type": "object",
+        "properties": {
+          "remote_servers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RemoteServerObject"
+            }
+          }
+        }
+      },
+      "RemoteServerObject": {
+        "type": "object",
+        "properties": {
+          "ip": {
+            "type": "string",
+            "description": "Remote server ip",
+            "example": "1.2.3.4"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "Remote user id",
+            "example": "0fe73ba3-82ac-4fab-ab8e-d2b83385f7af"
+          }
+        }
+      },
+      "GetAboutResponse": {
+        "required": [
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "config": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConfigObject"
+            }
+          },
+          "message": {
+            "type": "string",
+            "description": "kokomo-service",
+            "example": "kokomo-service"
+          },
+          "version": {
+            "type": "string",
+            "description": "Deployed version number",
+            "example": "0.0.100"
+          }
+        }
+      },
+      "ConfigObject": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Key",
+            "example": "key"
+          },
+          "value": {
+            "type": "string",
+            "description": "Value",
+            "example": "value"
+          }
+        }
+      },
+      "RequestServerResponse": {
+        "required": [
+          "server_ip"
+        ],
+        "type": "object",
+        "properties": {
+          "server_ip": {
+            "type": "string",
+            "description": "IP Address of requested server",
+            "example": "1.2.3.4"
+          }
+        }
+      },
+      "RequestServerRequest": {
+        "required": [
+          "call_id",
+          "user_id"
+        ],
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "user id",
+            "example": "513DE340E4206DDC"
+          },
+          "call_id": {
+            "type": "string",
+            "description": "Call ID to get a server for",
+            "example": "0fe73ba3-82ac-4fab-ab8e-d2b83385f7af"
+          },
+          "capture_method": {
+            "type": "string",
+            "description": "Capture method webrct(default) or ccapi",
+            "example": "webrtc"
+          }
+        }
+      },
+      "EndCallRequest": {
+        "required": [
+          "user_id"
+        ],
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "user id",
+            "example": "513DE340E4206DDC"
+          }
+        }
+      },
+      "UnauthorizedResponse": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Simple unauthorized message, very little information is given on purpose",
+            "example": "Unauthorized"
+          }
+        }
+      },
+      "NotFoundResponse": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Not Found Error occus when there are not any results",
+            "example": "Not Found"
+          }
+        }
+      },
+      "UnexpectedServerErrorResponse": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "An unexpected server error has occured",
+            "example": "An unexpected server error has occured"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "appenginecron": {
+        "type": "apiKey",
+        "name": "X-Appengine-Cron",
+        "in": "header"
+      },
+      "jwt": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  }
+}

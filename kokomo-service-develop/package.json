@@ -1,0 +1,50 @@
+{
+  "name": "kokomo-service",
+  "version": "0.0.102",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test:int": "IN_GCP=false DB_TYPE=sqlite mocha --timeout 30000 --exit test/int",
+    "test:int:circleci": "IN_GCP=false DB_TYPE=sqlite JUNIT_REPORT_PATH=tests/intreport.xml mocha --colors --reporter mocha-jenkins-reporter --exit --recursive --timeout 60000 test/int",
+    "test:unit": "IN_GCP=false DB_TYPE=sqlite mocha --timeout 30000 --exit test/unit",
+    "test:unit:circleci": "IN_GCP=false DB_TYPE=sqlite JUNIT_REPORT_PATH=tests/unitreport.xml mocha --colors --reporter mocha-jenkins-reporter --exit --recursive --timeout 60000 test/unit",
+    "start": "node app.js",
+    "start:local": "cross-env STAGE=dev GOOGLE_CLOUD_PROJECT=gcp-kokomo-dev DB_TYPE=sqlite MOCK_PLAYFAB_AUTH=true AUTH_DISABLED=true node app.js",
+    "start:itest": "cross-env STAGE=dev IN_GCP=false NODE_ENV=itest DB_TYPE=sqlite MOCK_PLAYFAB_AUTH=true AUTH_DISABLED=true node app.js",
+    "db:migrate": "NODE_ENV=postgres_gcloud sequelize-cli db:migrate",
+    "db:undo": "NODE_ENV=postgres_gcloud sequelize-cli db:migrate:undo",
+    "db:undo:all": "NODE_ENV=postgres_gcloud sequelize-cli db:migrate:undo:all",
+    "gcp-build_tmp": "node cloudProxy.js & sleep 5 && cross-env IN_GCP=true NODE_ENV=postgres_appengine sequelize-cli db:migrate && pkill cloud_sql_proxy"
+  },
+  "dependencies": {
+    "@google-cloud/compute": "^3.1.2",
+    "@google-cloud/error-reporting": "^2.0.4",
+    "@google-cloud/logging-winston": "^4.2.3",
+    "@google-cloud/monitoring": "^2.3.5",
+    "@google-cloud/secret-manager": "^3.11.0",
+    "axios": "^0.23.0",
+    "cls-hooked": "^4.2.2",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "express-openapi-validator": "^4.13.7",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.16.6",
+    "pg": "^8.7.3",
+    "rand-token": "^1.0.1",
+    "sequelize": "^6.17.0",
+    "sqlite3": "^5.0.2",
+    "swagger-ui-express": "^4.3.0",
+    "util": "^0.12.4",
+    "winston": "^3.7.2"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "mocha": "^9.2.1",
+    "sequelize-cli": "^6.4.1",
+    "mocha-jenkins-reporter": "^0.4.7"
+  },
+  "keywords": [],
+  "author": "",
+  "license": ""
+}

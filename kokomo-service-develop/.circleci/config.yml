@@ -1,0 +1,53 @@
+version: 2.1
+
+jobs:
+  tests:
+    docker:
+      - image: cimg/node:12.19
+    steps:
+      - checkout
+      - run:
+          command: npm install
+      - run:
+          name: Unit Tests
+          command: npm run test:unit:circleci
+      - run:
+          name: Integration Tests
+          command: npm run start:itest & sleep 5 && npm run test:int:circleci
+      - store_test_results:
+          path: tests
+      - store_artifacts:
+          path: tests
+          destination: tests
+  push:
+    docker:
+      - image: google/cloud-sdk:latest
+    steps:
+      - checkout
+      - run: echo ${GCLOUD_SERVICE_KEY} | gcloud auth activate-service-account --key-file=-
+      - run: mv ops/envConfig/kokomo-dev.yaml .
+      - run: gcloud app deploy --quiet kokomo-dev.yaml --project gcp-kokomo-dev --no-promote --version=${CIRCLE_TAG//./-}
+      - run: gcloud app deploy --quiet ops/cron/dev/cron.yaml --project gcp-kokomo-dev
+      - run: mv ops/envConfig/kokomo-stg.yaml .
+      - run: gcloud app deploy --quiet kokomo-stg.yaml --project gcp-kokomo-stg --no-promote --version=${CIRCLE_TAG//./-}
+      - run: gcloud app deploy --quiet ops/cron/stg/cron.yaml --project gcp-kokomo-stg
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - tests:
+          context: KOKOMO_SECRETS
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              only: /.*/
+      - push:
+          context: KOKOMO_SECRETS
+          requires:
+            - tests
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /[0-9]+\.[0-9]+\.[0-9]+/

@@ -1,0 +1,7 @@
+cron:
+  - description: "Adjust standby"
+    url: /api/v1/admin/gameserver/jobs/adjuststandby
+    schedule: every 10 minutes
+  - description: "Collect metrics"
+    url: /api/v1/admin/jobs/collectmetrics
+    schedule: every 5 minutes
