@@ -10,7 +10,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - newman/newman-run:
-          collection: https://www.getpostman.com/collections/29f49dd89b4de73b8afb 
+          collection: https://www.getpostman.com/collections/57848d55309e2192ce86
 
 workflows:
   example-workflow:
