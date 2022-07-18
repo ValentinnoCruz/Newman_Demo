@@ -15,4 +15,4 @@ jobs:
 workflows:
   example-workflow:
     jobs:
-      - example-job 
+      - example-job
